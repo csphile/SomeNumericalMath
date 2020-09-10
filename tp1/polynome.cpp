@@ -12,7 +12,21 @@ using namespace std;
 class Polynome
 {
 private:
- MonoVec data;
+	MonoVec data;
+	static void simplify(MonoVec& data){
+		MonoVec data_;
+		for (auto v: data){
+			if (v.coeff != 0){
+				if (data_.size() && data_.back().degree  == v.degree){
+					data_.back() = data_.back() + v;
+				}
+				else{
+					data_.push_back(v);
+				}
+			}
+		}
+		data = data_;
+	}
 public:
 	Polynome(int coeff = 0, unsigned degre = 0): data({Monome(coeff, degre)}) {}
 	Polynome(const vector<int>& coeff, const vector<unsigned>& degre){
@@ -30,21 +44,23 @@ public:
 	Polynome operator+(const Polynome& other){
 		int n = this -> data.size(), m = other.data.size();
 		int i = 0, j = 0;
-		Polynome ans;
-		while (i < n || j < m){
-			
+		Polynome ans = Polynome(this -> data);
+		for (auto& v: other.data){
+			ans.data.push_back(v);
 		}
+		simplify(ans.data);
 		return ans;
 	}
-	Polynome operator-(const Polynome& other){
-		int n = this -> data.size(), m = other.data.size();
-		int i = 0, j = 0;
-		Polynome ans;
-		while (i < n || j < m){
 
+	Polynome operator-(const Polynome& other){
+		Polynome tmp = other;
+		for (auto& v: tmp.data){
+			v.coeff = -v.coeff;
 		}
+		Polynome ans = this -> operator+(tmp);
 		return ans;
 	}
+
 	Polynome operator+(const int& v){
 		MonoVec data_ = data;
 		Monome toadd(v, 0);
@@ -56,11 +72,13 @@ public:
 	}
 
 	Polynome operator-(const int& v){
-		return this -> operator-(-v);
+		return this -> operator+(-v);
 	}
-	Polynome operator*(const Polynome& v){
-		// fast FFT?
-	}
+
+	// Polynome operator*(const Polynome& v){
+	// 	// fast FFT?
+	// }
+
 	friend ostream& operator<<(ostream& os, const Polynome& poly){
 		int cnt = 0;
 		for (auto mono: poly.data){
@@ -69,22 +87,8 @@ public:
 		}
 		return os;
 	}
-	~Polynome(){}
 
-	static void simplify(MonoVec& data){
-		MonoVec data_;
-		for (auto v: data){
-			if (v.coeff != 0){
-				if (data_.size() && data_.back().degree  == v.degree){
-					data_.back() = data_.back() + v;
-				}
-				else{
-					data_.push_back(v);
-				}
-			}
-		}
-		data = data_;
-	}
+	~Polynome(){}
 };
 
 #endif

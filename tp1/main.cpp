@@ -13,6 +13,6 @@ int main(void) {
 	cout << "Q+1:\t" << Q+1 << endl; 
 	cout << "P+Q:\t" << P+Q << endl;
 	cout << "P-Q:\t" << P-Q << endl;
-	cout << "P*Q:\t" << P*Q << endl;
+	// cout << "P*Q:\t" << P*Q << endl;
 	return 0;
 };

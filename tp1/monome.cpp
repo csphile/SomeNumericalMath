@@ -41,7 +41,8 @@ public:
 	}
 	friend class Polynome;
 	friend std::ostream & operator <<(ostream& os, const Monome& mono){
-		os << mono.coeff << "x^" << mono.degree;
+		if (mono.degree > 0) os << mono.coeff << "x^" << mono.degree;
+		else os << mono.coeff;
 		return os;
 	}
 

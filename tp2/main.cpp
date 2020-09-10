@@ -10,10 +10,10 @@ public:
     AbsVect(int n_): n(n_){data = new T[n_];}
     int taille(){return n;}
     virtual T operator()(unsigned i) const = 0;
-    virtual T & operator()(unsigned i) = 0;
-    void remplit(const T& t){
-        for (int i = 1; i <= this -> taille(); i++) 
-            this->operator()(i) = t;
+    virtual T & operator()(unsigned i) = 0; 
+    void remplit(T& toreplace, const T& t){
+        // cout << " called " << endl;
+        toreplace = t;
     }
     T norm(){
         T ans;
@@ -38,6 +38,7 @@ public:
         return this -> data[i - 1];
     }
     T& operator ()(unsigned i){
+        // cout << "called operator &" << endl; 
         return this -> data[i - 1];
     }
 };
@@ -46,8 +47,8 @@ template<class T> class SubVect: public AbsVect<T>{
 public:
     SubVect(const AbsVect<T>& other, int beg, int n_, int gap): AbsVect<T>(n_) {
         int i = beg;
-        for (int ind = 0; ind < n_; ind++){
-            this -> operator()(i) = other(i);
+        for (int ind = 1; ind <= n_; ind++){
+            this -> operator()(ind) = other(i);
             i += gap;
         }
     }
@@ -59,7 +60,7 @@ public:
     }
 
     void init(const T& t){
-        this -> remplit(t);
+        for (int i = 1; i <= this -> taille(); i++) this -> remplit(this -> operator()(i), t);
     }
 };
 

@@ -42,8 +42,6 @@ public:
 	Polynome(const MonoVec& data0): data(data0) {}
 
 	Polynome operator+(const Polynome& other){
-		int n = this -> data.size(), m = other.data.size();
-		int i = 0, j = 0;
 		Polynome ans = Polynome(this -> data);
 		for (auto& v: other.data){
 			ans.data.push_back(v);

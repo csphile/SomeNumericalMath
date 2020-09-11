@@ -65,12 +65,6 @@ private:
     AbsVect<T>* oth;
 public:
     SubVect(AbsVect<T>& other, int beg_, int n_, int gap_): AbsVect<T>(n_), beg(beg_), gap(gap_) {
-        // int i = beg;
-        // for (int ind = 1; ind <= n_; ind++){
-        //     this -> operator()(ind) = &other(i);
-        //     i += gap;
-        // }
-        // this -> data = other.data;
         oth = &other;
     }
 

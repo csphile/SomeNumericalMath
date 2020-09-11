@@ -1,76 +1,100 @@
 #include <iostream>
 #include <math.h>
+#include <memory>
 // #include "vect_dyn.hpp"
 using namespace std;
+
 template <typename T> class AbsVect{
 protected:
     int n;
     T* data;
 public:
-    AbsVect(int n_): n(n_){data = new T[n_];}
+
+    // shared_ptr<T> shared_data;
+    AbsVect(int n_): n(n_){
+        // shared_data = make_shared<T>(n_);
+        data = new T[n_ + 1];
+    }
+
     int taille(){return n;}
+
     virtual T operator()(unsigned i) const = 0;
+
     virtual T & operator()(unsigned i) = 0; 
+
     void remplit(T& toreplace, const T& t){
         // cout << " called " << endl;
         toreplace = t;
     }
+
     T norm(){
-        T ans;
+        T ans = 0;
         for (int i = 1; i <= n; i++){
             ans += this -> operator()(i) * this -> operator()(i);
         }
         return sqrt(ans);
     }
+
     friend ostream& operator<<(ostream& os, const AbsVect<T>& absVec){
         for (int i = 1; i <= absVec.n; i++){
-            os << absVec(i) << " ";
+            os << absVec.operator()(i) << " ";
         }
         return os;
     }
-    ~AbsVect(){delete[] this -> data;}
+
+    ~AbsVect() {delete[] this -> data;}
 };
 
 template<typename T> class Vect: public AbsVect<T>{
 public:
     Vect(int n_): AbsVect<T>(n_) {}
+
     T operator()(unsigned i) const{
-        return this -> data[i - 1];
+        return this -> data[i];
     }
+
     T& operator ()(unsigned i){
         // cout << "called operator &" << endl; 
-        return this -> data[i - 1];
+        return this -> data[i];
     }
 };
 
 template<class T> class SubVect: public AbsVect<T>{
+private:
+    int beg, gap;
+    AbsVect<T>* oth;
 public:
-    SubVect(const AbsVect<T>& other, int beg, int n_, int gap): AbsVect<T>(n_) {
-        int i = beg;
-        for (int ind = 1; ind <= n_; ind++){
-            this -> operator()(ind) = other(i);
-            i += gap;
-        }
+    SubVect(AbsVect<T>& other, int beg_, int n_, int gap_): AbsVect<T>(n_), beg(beg_), gap(gap_) {
+        // int i = beg;
+        // for (int ind = 1; ind <= n_; ind++){
+        //     this -> operator()(ind) = &other(i);
+        //     i += gap;
+        // }
+        // this -> data = other.data;
+        oth = &other;
     }
+
     T operator()(unsigned i) const{
-        return this -> data[i - 1];
+       return oth -> operator()(beg + (i -  1)*gap);
     }
+
     T& operator()(unsigned i){
-        return this -> data[i - 1];
+        return oth -> operator()(beg + (i -  1)*gap);
     }
 
     void init(const T& t){
-        for (int i = 1; i <= this -> taille(); i++) this -> remplit(this -> operator()(i), t);
+        for (int i = 1; i <= this -> taille(); i++) 
+            this -> operator()(i) = t;
     }
 };
 
-using namespace std;
 
 
 int main(){
     Vect<double> v(10);
     for (int i = 1; i <= 10; ++i)
         v(i) = i;
+    //cout << "v:\t" << v.norm() << endl;
     cout << "v:\t" << v << endl;
     SubVect<double> w(v, 1, 5, 2);
     cout << "w:\t" << w << endl;

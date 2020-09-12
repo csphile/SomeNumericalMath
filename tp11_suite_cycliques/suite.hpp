@@ -53,9 +53,10 @@ template <typename T> class Suite {
             list<T> hist;
             auto it = hist.begin();
             do {
-                hist.push_back(etat);
+                hist.push_back(this -> etat);
                 this -> operator++();
-                it = find(hist.begin(), hist.end(), etat);
+                it = find(hist.begin(), hist.end(), this -> etat);
+                // cout << "cycled!" << endl;
             } while (it == hist.end());
             cout << "steps of iterations before cycle: " << n_iter << endl;
             return distance(it, hist.end());
@@ -109,21 +110,25 @@ class Jeu: public Suite<list<int>>{
                 --v;
                 if (v) newstate.push_back(v);
             }
-            newstate.push_back(sum);
-            etat = list<int>(newstate);
+            if (sum) newstate.push_back(sum);
+            etat = move(newstate);
             // for (auto v: newstate) cout << v << endl;
         }
+
+        Jeu(const list<int>& data): Suite<list<int>>(data){}
+
     public:
         Jeu(const int& n){
-            etat = list<int>(0);
+            list<int> _etat;
             for (int i = 0; i < n; i++){
-                etat.push_back(1);
+                _etat.push_back(1);
             }
+            etat = _etat;
+            n_iter = 0;
         }
 
         void print(ostream& os) override {
             int cnt = 0;
-            // os << "called ! " << endl;
             for (auto& v: etat){
                 if (cnt++ < etat.size() - 1) 
                     os << v << " - ";

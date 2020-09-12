@@ -18,11 +18,10 @@ int main(){
     cout << X.cycle() << endl;
 
     Jeu j(6);
-    for(int i=0; i<=4; ++i){
+    for(int i=0; i<=5; ++i){
         cout << i << ": " << j << endl; 
         ++j;
     }
-    j.reinit();
     cout << j.cycle() << endl;
     Jeu j1(8), j2(100);
     cout << j1.cycle() << endl;

@@ -5,7 +5,7 @@ A repo for implementation of some mathematical tools which include:
 
 - cyclic suites
 
-- step functions
+- step functions, integration and derivation
 
-- integration
+- Newton Lagrange Interpolation
 

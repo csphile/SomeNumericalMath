@@ -2,3 +2,7 @@
 .idea/*
 */main
 */main.dSYM/*
+
+*/CMakeLists.txt
+*/cmake-build-debug/*
+.*

@@ -39,7 +39,7 @@ protected:
     std::vector<T> points;
 };
 
-template class StepFunction<double>;
+// template class StepFunction<double>;
 
 class CstStepFunction: public StepFunction<double>
 {

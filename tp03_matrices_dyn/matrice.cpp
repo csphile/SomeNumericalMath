@@ -4,7 +4,8 @@
 using namespace std;
 
 int main(){
-	Matrice<int> M(3,3);
+	Matrice<int> M(3,3); 
+	cout << "sucessfully generated" << endl;
 	for (int i = 1; i<= M.nb_lignes(); ++i)
 		for (int j = 1; j<=M.nb_cols(); ++j)
 			M[i][j] = i*j + i;

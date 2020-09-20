@@ -8,11 +8,11 @@ int main(void) {
 	vector<unsigned> degre{0, 3, 2, 5, 6};
 	Polynome P(coeff, degre);
 	cout << "P:\t" << P << endl;
-	Polynome Q(4, 2);
+	Polynome Q(4, 1);
 	cout << "Q:\t" << Q << endl;
 	cout << "Q+1:\t" << Q+1 << endl; 
 	cout << "P+Q:\t" << P+Q << endl;
 	cout << "P-Q:\t" << P-Q << endl;
-	// cout << "P*Q:\t" << P*Q << endl;
+	cout << "P*Q:\t" << P*Q << endl;
 	return 0;
 };

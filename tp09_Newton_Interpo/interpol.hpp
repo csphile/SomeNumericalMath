@@ -16,7 +16,7 @@ public:
     double max();
 protected:
     int n;
-    std::shared_ptr<double[]> points_x, points_y, poids;
+    double* points_x, *points_y, *poids;
 };
 
 class InterpolLin: public Interpol{

@@ -10,6 +10,7 @@ private:
 	vector<vector<int>> a;
 	//int* a = new int[row][col];
 
+public:
 //constructor
 	matrice(int row_, int col_): row(row_), col(col_), a(vector<vector<int>>(row_, vector<int>(col_))){}
 	//matrice(int row_, int col_): row(row_), col(col_), a(row_, vector<int>(col_)){}
@@ -18,12 +19,12 @@ private:
 	matrice(int row_, int col_, vector<vector<int>> a_):row(row_), col(col_), a(a_){}
 
 // operator d'affectation
-	matrice operator=(matrice &m){
-		row = m.row;
-		col = m.col;
-		a = vector<vector<int>>(row, vector<int>(col));
-		return *this;
-	}
+	// matrice operator=(matrice &m){
+	// 	row = m.row;
+	// 	col = m.col;
+	// 	a = vector<vector<int>>(row, vector<int>(col));
+	// 	return *this;
+	// }
 // () as M(3,3) for constructor, () as M(i,j) fill value, () as (M,3) give columns
 	// matrice operator()(int i, int j){
 	// 	vector<vector<int> > a(int row, vector<int>(col));

@@ -3,6 +3,7 @@
 #include "monome.cpp"
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 typedef std::vector<Monome> MonoVec;
 typedef std::vector<Monome>::iterator MonoVec_It; 
 typedef std::vector<Monome>::const_iterator MonoVec_CIt;
@@ -27,6 +28,7 @@ private:
 		}
 		data = data_;
 	}
+
 public:
 	Polynome(int coeff = 0, unsigned degre = 0): data({Monome(coeff, degre)}) {}
 	Polynome(const vector<int>& coeff, const vector<unsigned>& degre){
@@ -46,6 +48,7 @@ public:
 		for (auto& v: other.data){
 			ans.data.push_back(v);
 		}
+		sort(ans.data.begin(), ans.data.end()); // sort before print
 		simplify(ans.data);
 		return ans;
 	}
@@ -56,6 +59,7 @@ public:
 			v.coeff = -v.coeff;
 		}
 		Polynome ans = this -> operator+(tmp);
+		simplify(ans.data);
 		return ans;
 	}
 
@@ -65,6 +69,7 @@ public:
 		data_.push_back(toadd);
 		sort(data_.begin(), data_.end());
 		simplify(data_);
+		
 		Polynome toR(data_);
 		return toR;
 	}
@@ -73,9 +78,23 @@ public:
 		return this -> operator+(-v);
 	}
 
-	// Polynome operator*(const Polynome& v){
-	// 	// fast FFT?
-	// }
+	Polynome operator*(const Polynome& v){
+		// fast FFT?
+		Polynome cur = Polynome(this -> data);
+		MonoVec ans;
+		for (auto othermono = v.data.begin(); othermono != v.data.end(); ++othermono){
+			for (auto thismono = cur.data.begin(); thismono !=cur.data.end(); ++thismono){
+				Monome tmp;
+				tmp.coeff = thismono->coeff * othermono->coeff;
+				tmp.degree =  thismono->degree + othermono->degree; // why cannot thismono.degree ?
+				ans.push_back(tmp);
+			}
+		}
+		sort(ans.begin(), ans.end());
+		simplify(ans);
+		return ans;
+
+	}
 
 	friend ostream& operator<<(ostream& os, const Polynome& poly){
 		int cnt = 0;

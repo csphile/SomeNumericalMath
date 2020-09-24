@@ -4,7 +4,9 @@
 #include "interpol.hpp"
 #include <algorithm>
 #include <iostream>
+#include <vector>
 
+using Points = std::vector<double>;
 Interpol::Interpol(const std::string& nom_fichier, int n) {
     points_x = new double[n];
     points_y = new double[n];
@@ -15,8 +17,24 @@ Interpol::Interpol(const std::string& nom_fichier, int n) {
     for(int i=0; i < n; ++i){
         file >> points_x[i] >> points_y[i];
     }
-    // for (int i = 0; i < n; i++) std::cout << points_x[i] << " " << points_y[i] << std::endl;
+
     file.close();
+    std::vector<Points> to_sort(n, Points(2));
+    for (int i = 0; i < n; i++){
+        to_sort[i][0] = points_x[i];
+        to_sort[i][1] = points_y[i];
+    }
+    std::sort(to_sort.begin(), to_sort.end());
+    for (int i = 0; i < n; i++){
+        points_x[i] = to_sort[i][0];
+        points_y[i] = to_sort[i][1];
+    }
+    // compute weights
+    for (int i = 0; i < n; i++)
+        if (i < n - 1)
+            poids[i] = (points_y[i + 1] - points_y[i]) / (points_x[i + 1] - points_x[i]);
+
+    // for (int i = 0; i < n; i++) std::cout << points_x[i] << " " << points_y[i] << " " << poids[i] << std::endl;
 }
 
 Interpol::Interpol(const Interpol &other) {
@@ -37,17 +55,26 @@ Interpol::~Interpol() {
 }
 
 double Interpol::min() {
-    return *std::min_element(points_x, points_x + n );
+    return points_x[0];
 }
 
 double Interpol::max() {
-    return *std::max_element(points_x, points_x + n );
+    return points_x[n - 1];
 }
 
 
 double InterpolLin::operator()(double x) {
-
-    return 0;
+    auto it = std::lower_bound(points_x, points_x + n, x);
+    int k = it - points_x;
+    double a_k = (k < n - 1)? poids[k]: poids[n - 2];
+    return points_y[k] + a_k * (x - points_x[k]);
 }
 
 InterpolLin::InterpolLin(const std::string &nom_fichier, int n): Interpol(nom_fichier, n) {}
+
+double InterpolPoly::operator()(double x) {
+    //TO DO
+    return 0;
+}
+
+InterpolPoly::InterpolPoly(const std::string &nom_fichier, int n) : Interpol(nom_fichier, n){}

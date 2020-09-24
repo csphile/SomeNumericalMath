@@ -24,4 +24,10 @@ public:
     double operator()(double x);
     InterpolLin(const std::string& nom_fichier, int n);
 };
+
+class InterpolPoly: public Interpol{
+public:
+    InterpolPoly(const std::string& nom_fichier, int n);
+    double operator()(double x);
+};
 #endif //TPS_INTERPOL_HPP

@@ -1,4 +1,4 @@
-# tps
+# Some numerical maths
 
 A repo for implementation of some mathematical tools which include:
 - polynomes
